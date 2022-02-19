@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "offer"
+  labels:
+    app: "offer"
+spec:
+  selector:
+    matchLabels:
+      app: "offer"
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: "offer"
+    spec:
+      containers:
+      - name: "offer"
+        image: manjeetyadav19/offer:latest
+        ports:
+        - containerPort: 1001
+          name: "offer"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: "offer"
+spec:
+  selector:
+    app: "offer"
+  type: ClusterIP
+  ports:
+  - port: 1001
+    targetPort: 1001
+
